@@ -1,0 +1,14 @@
+version "4.4"
+
+#include "zscript/thundernade/thundernade.zsc"
+#include "zscript/mg13/mg13.zsc"
+//#include "zscript/stone/stone.zsc"
+
+class ThunderGrenadeGiver : EventHandler
+{
+	override void PlayerEntered(PlayerEvent e)
+	{
+		players[e.PlayerNumber].mo.A_GiveInventory("HDThunderGrenades", 1);
+		players[e.PlayerNumber].mo.A_GiveInventory("HDMG13Grenades", 1);
+	}
+}

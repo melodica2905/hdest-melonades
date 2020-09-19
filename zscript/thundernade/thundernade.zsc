@@ -1,0 +1,230 @@
+
+const HDLD_GRE_THUNDER="thg";
+const ENC_THUNGRENADE=ENC_FRAG*1.1;
+
+class HDThunderGrenades:HDGrenadethrower{
+	default{
+		weapon.selectionorder 1010;
+		weapon.slotnumber 0;
+		tag "Thunder Grenades";
+		hdgrenadethrower.ammotype "HDThunderGrenadeAmmo";
+		hdgrenadethrower.throwtype "HDThunderGrenade";
+		hdgrenadethrower.spoontype "HDThunderSpoon";
+		hdgrenadethrower.wiretype "ThunderTripwireFrag";
+		inventory.icon "TFRGA0";
+	}
+	
+	override string,double getpickupsprite(){return "TFRGA0",0.7;}
+	override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl){
+		if(sb.hudlevel==1){
+			sb.drawimage(
+				(weaponstatus[0]&FRAGF_PINOUT)?"TFRGF0":"TFRGA0",
+				(-52,-4),sb.DI_SCREEN_CENTER_BOTTOM,scale:(0.7,0.7)
+			);
+			sb.drawnum(hpl.countinv("HDThunderGrenadeAmmo"),-45,-8,sb.DI_SCREEN_CENTER_BOTTOM);
+		}
+		sb.drawwepnum(
+			hpl.countinv("HDThunderGrenadeAmmo"),
+			(HDCONST_MAXPOCKETSPACE/ENC_FRAG)
+		);
+		sb.drawwepnum(hdw.weaponstatus[FRAGS_FORCE],50,posy:-10,alwaysprecise:true);
+		if(!(hdw.weaponstatus[0]&FRAGF_SPOONOFF)){
+			sb.drawrect(-21,-19,5,4);
+			if(!(hdw.weaponstatus[0]&FRAGF_PINOUT))sb.drawrect(-25,-18,3,2);
+		}else{
+			int timer=hdw.weaponstatus[FRAGS_TIMER];
+			if(timer%3)sb.drawwepnum(140-timer,140,posy:-15,alwaysprecise:true);
+		}
+	}
+	
+	override void ForceBasicAmmo(){
+		owner.A_SetInventory("HDThunderGrenadeAmmo",1);
+	}
+}
+
+class ThunderTripwireFrag:Tripwire{
+	default{
+		weapon.selectionorder 1011;
+		tripwire.ammotype "HDThunderGrenadeAmmo";
+		tripwire.throwtype "ThunderTrippingFrag";
+		tripwire.spoontype "HDThunderSpoon";
+		tripwire.weptype "HDThunderGrenades";
+	}
+}
+
+class ThunderTrippingFrag:TrippingGrenade{
+	default{
+		//$Category "Misc/Hideous Destructor/Traps"
+		//$Title "Tripwire Grenade"
+		//$Sprite "FRAGA0"
+
+		scale 0.4;
+		trippinggrenade.rollertype "HDThunderGrenadeRoller";
+		trippinggrenade.spoontype "HDThunderSpoon";
+		trippinggrenade.droptype "HDThunderGrenadeAmmo";
+		hdupk.pickuptype "HDThunderGrenadeAmmo";
+	}
+	override void postbeginplay(){
+		super.postbeginplay();
+		pickupmessage=getdefaultbytype("HDThunderGrenadeAmmo").pickupmessage();
+	}
+	states{
+	spawn:
+		TFRG A 1 nodelay A_TrackStuckHeight();
+		wait;
+	}
+}
+
+class HDThunderGrenadeRoller:HDFragGrenadeRoller{
+	default{
+		+ROLLSPRITE
+		+ROLLCENTER
+		scale 0.4;
+		obituary "%o felt %k's thunder bust.";
+		radiusdamagefactor 0.04;pushfactor 1.4;maxstepheight 2;mass 30;
+	}
+	states{
+	spawn:
+		TFRG A 0 nodelay{
+			HDMobAI.Frighten(self,512);
+		}
+	spawn2:
+		#### BCDE 2{
+			A_SetRoll(frandom(-15.5, 15.5));
+			if(abs(vel.z-keeprolling.z)>10)A_StartSound("misc/fragknock",CHAN_BODY);
+			else if(floorz>=pos.z)A_StartSound("misc/fragroll");
+			keeprolling=vel;
+			if(abs(vel.x)<0.4 && abs(vel.y)<0.4) setstatelabel("death");
+		}loop;
+	bounce:
+		---- A 0{
+			bmissile=false;
+			vel*=0.3;
+		}goto spawn2;
+	death:
+		---- A 2{
+			if(abs(vel.z-keeprolling.z)>3){
+				A_StartSound("misc/fragknock",CHAN_BODY);
+				keeprolling=vel;
+			}
+			if(abs(vel.x)>0.4 || abs(vel.y)>0.4) setstatelabel("spawn");
+		}wait;
+	destroy:
+		TNT1 A 1{
+			bsolid=false;bpushable=false;bmissile=false;bnointeraction=true;bshootable=false;
+			A_HDBlast(
+				430,280,128,"SmallArms0",
+				pushradius:200,pushamount:16,
+				immolateradius:300,immolateamount:-200,immolatechance:90
+			);
+			spawn("LingeringThunder",pos,ALLOW_REPLACE);
+			spawn("LingeringThunder",pos,ALLOW_REPLACE);
+			Spawn("HDExplosion",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDExplosion",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDExplosion",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDExplosion",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDSmoke",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDSmoke",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDSmoke",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			Spawn("HDSmoke",pos+(frandom(-4,4),frandom(-4,4),frandom(-4,4)),ALLOW_REPLACE);
+			
+			DistantNoise.Make(self,"world/tbfar");
+			DistantNoise.Make(self,"world/tbfar2",2.);
+			DistantQuaker.Quake(self,
+				5,50,2048,8,128,256,256
+			);
+
+			//check floor and ceiling and spawn more debris
+			DistantNoise.Make(self,"world/tbfar");
+			for(int i=0;i<3;i++)A_SpawnItemEx("WallChunker",
+				frandom(-4,4),frandom(-4,4),-4,
+				flags:SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
+			);
+			
+			A_StartSound("weapons/plascrack",11);
+			A_StartSound("weapons/plascrack",12);
+			A_StartSound("weapons/plascrack",13);
+			A_StartSound("world/tbfar",14);
+			A_StartSound("world/explode",15);
+		}
+		stop;
+	}
+}
+class HDThunderGrenade:HDFragGrenade{
+	default{
+		+ROLLSPRITE
+		+ROLLCENTER
+		scale 0.4;
+		obituary "%o felt %k's thunder bust.";
+		hdfraggrenade.rollertype "HDThunderGrenadeRoller";
+	}
+	states
+	{
+	spawn:
+		TFRG BCDE 2 A_SetRoll(frandom(-15.5, 15.5));
+		loop;
+	}
+}
+
+class HDThunderGrenadeAmmo:HDAmmo{
+	default{
+		//+forcexybillboard
+		inventory.icon "TFRGA0";
+		inventory.amount 1;
+		scale 0.4;
+		inventory.maxamount 50;
+		inventory.pickupmessage "Picked up a Thunder Grenade.";
+		inventory.pickupsound "weapons/pocket";
+		tag "Thunder Grenades";
+		hdpickup.refid HDLD_GRE_THUNDER;
+		hdpickup.bulk ENC_THUNGRENADE;
+	}
+	override bool IsUsed(){return true;}
+	states{
+	spawn:
+		TFRG A -1;stop;
+	}
+}
+
+class HDThunderSpoon : HDFragSpoon
+{
+	default
+	{
+		Scale 0.45;
+	}
+	states{
+	spawn:
+		TFPN A 2{roll+=40;}wait;
+	death:
+		TFPN A -1;
+	}
+}
+
+class ThunderFragP:HDUPK{
+	default{
+		//+forcexybillboard
+		scale 0.4;height 3;radius 3;
+		hdupk.amount 1;
+		hdupk.pickuptype "HDThunderGrenadeAmmo";
+		hdupk.pickupmessage "Picked up a Thunder Grenade.";
+		hdupk.pickupsound "weapons/rifleclick2";
+		stamina 1;
+	}
+	override void postbeginplay(){
+		super.postbeginplay();
+		pickupmessage=getdefaultbytype("HDThunderGrenadeAmmo").pickupmessage();
+	}
+	states{
+	spawn:
+		TFRG A -1;
+	}
+}
+
+class HDThunderGrenadePickup:ThunderFragP{
+	override void postbeginplay(){
+		super.postbeginplay();
+		A_SpawnItemEx("ThunderFragP",5,5,flags:SXF_NOCHECKPOSITION);
+		A_SpawnItemEx("ThunderFragP",5,0,flags:SXF_NOCHECKPOSITION);
+		A_SpawnItemEx("ThunderFragP",0,5,flags:SXF_NOCHECKPOSITION);
+	}
+}

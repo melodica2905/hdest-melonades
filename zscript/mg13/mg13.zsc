@@ -1,0 +1,226 @@
+/*
+"MG13" Hand Grenades
+
+Found in an old ACME (Armed CoMbat Explosives) Manufacturing Ltd. warehouse, 
+stashed inside large boxes labeled "DANGER", the MG13 was ment as a new, revolutionary
+hand grenade, providing enough explosive power to level small buildings, destroy light
+vehicles, and able to be thrown and carried by just about any soldier on the field.
+
+In their infinite wistom, they manufactured these in large quantities, way before
+any testings were actually done with them. Concerns quickly arose after the soldier
+tasked with throwing the grenade to test it was barely able to throw it a few feet
+forward, and those (alongside the people holding them) were quickly erased as the grenade
+detonated, levelling the entire building and killing atleast 80% of its personel.
+*/
+
+const HDLD_GRE_MG13="mg3";
+const ENC_MG13GRENADE=ENC_FRAG*4.5;
+
+class HDMG13Grenades:HDGrenadethrower{
+	default{
+		weapon.selectionorder 1000;
+		weapon.slotnumber 0;
+		tag "MG13 Grenades";
+		hdgrenadethrower.ammotype "HDMG13GrenadeAmmo";
+		hdgrenadethrower.throwtype "HDMG13Grenade";
+		hdgrenadethrower.spoontype "HDMG13Spoon";
+		hdgrenadethrower.wiretype "MG13TripwireGrenade";
+		inventory.icon "MG13A0";
+	}
+	
+	override string,double getpickupsprite(){return "MG13A0",0.8;}
+	override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl){
+		if(sb.hudlevel==1){
+			sb.drawimage(
+				(weaponstatus[0]&FRAGF_PINOUT)?"MG13F0":"MG13A0",
+				(-52,-4),sb.DI_SCREEN_CENTER_BOTTOM,scale:(0.8,0.8)
+			);
+			sb.drawnum(hpl.countinv("HDMG13GrenadeAmmo"),-45,-8,sb.DI_SCREEN_CENTER_BOTTOM);
+		}
+		sb.drawwepnum(
+			hpl.countinv("HDMG13GrenadeAmmo"),
+			(HDCONST_MAXPOCKETSPACE/ENC_FRAG)
+		);
+		sb.drawwepnum(hdw.weaponstatus[FRAGS_FORCE],50,posy:-10,alwaysprecise:true);
+		if(!(hdw.weaponstatus[0]&FRAGF_SPOONOFF)){
+			sb.drawrect(-21,-19,5,4);
+			if(!(hdw.weaponstatus[0]&FRAGF_PINOUT))sb.drawrect(-25,-18,3,2);
+		}else{
+			int timer=hdw.weaponstatus[FRAGS_TIMER];
+			if(timer%3)sb.drawwepnum(140-timer,140,posy:-15,alwaysprecise:true);
+		}
+	}
+	
+	override void ForceBasicAmmo(){
+		owner.A_SetInventory("HDMG13GrenadeAmmo",1);
+	}
+}
+
+class MG13TripwireGrenade:Tripwire{
+	default{
+		weapon.selectionorder 1001;
+		tripwire.ammotype "HDMG13GrenadeAmmo";
+		tripwire.throwtype "MG13TrippingFrag";
+		tripwire.spoontype "HDMG13Spoon";
+		tripwire.weptype "HDMG13Grenades";
+	}
+}
+
+class MG13TrippingFrag:TrippingGrenade{
+	default{
+		//$Category "Misc/Hideous Destructor/Traps"
+		//$Title "Tripwire Grenade"
+		//$Sprite "FRAGA0"
+
+		scale 0.65;
+		trippinggrenade.rollertype "HDMG13GrenadeRoller";
+		trippinggrenade.spoontype "HDMG13Spoon";
+		trippinggrenade.droptype "HDMG13GrenadeAmmo";
+		hdupk.pickuptype "HDMG13GrenadeAmmo";
+	}
+	override void postbeginplay(){
+		super.postbeginplay();
+		pickupmessage=getdefaultbytype("HDMG13GrenadeAmmo").pickupmessage();
+	}
+	states{
+	spawn:
+		MG13 A 1 nodelay A_TrackStuckHeight();
+		wait;
+	}
+}
+
+class HDMG13GrenadeRoller:HDFragGrenadeRoller{
+	default{
+		scale 0.65;
+		obituary "%o was fragged by %k.";
+		radiusdamagefactor 0.04;pushfactor 1.4;maxstepheight 2;mass 500;
+	}
+	states{
+	spawn:
+		MG13 A 0 nodelay{
+			HDMobAI.Frighten(self,512);
+		}
+	spawn2:
+		#### A 0 A_ScaleVelocity(0.2);
+		#### BCD 2{
+			if(abs(vel.z-keeprolling.z)>10)A_StartSound("misc/fragknock",CHAN_BODY);
+			else if(floorz>=pos.z)A_StartSound("misc/fragroll");
+			keeprolling=vel;
+			if(abs(vel.x)<0.4 && abs(vel.y)<0.4) setstatelabel("death");
+		}goto spawn2+1;
+	bounce:
+		---- A 0{
+			bmissile=false;
+			vel*=0.3;
+		}goto spawn2;
+	death:
+		---- A 2{
+			if(abs(vel.z-keeprolling.z)>3){
+				A_StartSound("misc/fragknock",CHAN_BODY);
+				keeprolling=vel;
+			}
+			if(abs(vel.x)>0.4 || abs(vel.y)>0.4) setstatelabel("spawn");
+		}wait;
+	destroy:
+		TNT1 A 1{
+			bsolid=false;bpushable=false;bmissile=false;bnointeraction=true;bshootable=false;
+			A_HDBlast(500,7500,400,
+				pushradius:512,pushamount:288,fullpushradius:256
+			);
+			DistantQuaker.Quake(self,4,35,512,10);
+			A_StartSound("world/explode",CHAN_AUTO);
+			A_AlertMonsters();
+			actor xpl=spawn("WallChunker",self.pos-(0,0,1),ALLOW_REPLACE);
+				xpl.target=target;xpl.master=master;xpl.stamina=stamina;
+			xpl=spawn("HDExplosion",self.pos-(0,0,1),ALLOW_REPLACE);
+				xpl.target=target;xpl.master=master;xpl.stamina=stamina;
+			A_SpawnChunks("BigWallChunk",14,4,12);
+			distantnoise.make(self,"world/rocketfar");
+			
+			for(int i; i < 18; i++)
+			{
+				A_SetAngle(angle+20);
+				A_SpawnItemEx("HDExplosion",300+frandom(-15,15),0,32);
+				A_SpawnItemEx("HDSmoke",300+frandom(-15,15),0,32);
+				A_SpawnItemEx("HDSilentExplosion",250+frandom(-15,15),0,64);
+				A_SpawnItemEx("HDSmoke",200+frandom(-15,15),0,64);
+				A_SpawnItemEx("HDSilentExplosion",150+frandom(-15,15),0,96);
+				A_SpawnItemEx("HDSmoke",100+frandom(-15,15),0,96);
+				A_SpawnItemEx("HDSilentExplosion",50+frandom(-15,15),0,128);
+				A_SpawnItemEx("HDSmoke",50+frandom(-15,15),0,128);
+			}
+		}
+		stop;
+	}
+}
+class HDMG13Grenade:HDFragGrenade{
+	default{
+		scale 0.65;
+		obituary "%o was fragged by %k.";
+		hdfraggrenade.rollertype "HDMG13GrenadeRoller";
+		Mass 1500;
+	}
+	states
+	{
+	spawn:
+		TNT1 A 0 NODELAY A_ScaleVelocity(0.3);
+		MG13 BCD 2 ;
+		Goto Spawn+1;
+	}
+}
+
+class HDMG13GrenadeAmmo:HDAmmo{
+	default{
+		//+forcexybillboard
+		inventory.icon "MG13A0";
+		inventory.amount 1;
+		scale 0.65;
+		inventory.maxamount 50;
+		inventory.pickupmessage "Picked up an MG13 Grenade.";
+		inventory.pickupsound "weapons/pocket";
+		tag "MG13 Grenades";
+		hdpickup.refid HDLD_GRE_MG13;
+		hdpickup.bulk ENC_MG13GRENADE;
+	}
+	override bool IsUsed(){return true;}
+	states{
+	spawn:
+		MG13 A -1;stop;
+	}
+}
+
+class HDMG13Spoon : HDFragSpoon
+{
+	default
+	{
+		Scale 0.65;
+	}
+}
+
+class MG13GrenadeP:HDUPK{
+	default{
+		//+forcexybillboard
+		scale 0.65;height 3;radius 3;
+		hdupk.amount 1;
+		hdupk.pickuptype "HDMG13GrenadeAmmo";
+		hdupk.pickupmessage "Picked up an MG13 Grenade.";
+		hdupk.pickupsound "weapons/rifleclick2";
+		stamina 1;
+	}
+	override void postbeginplay(){
+		super.postbeginplay();
+		pickupmessage=getdefaultbytype("HDMG13GrenadeAmmo").pickupmessage();
+	}
+	states{
+	spawn:
+		MG13 A -1;
+	}
+}
+
+class HDSilentExplosion : HDExplosion
+{
+	default
+	{
+		deathsound "";
+	}
+}
