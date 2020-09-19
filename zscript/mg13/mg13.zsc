@@ -54,6 +54,13 @@ class HDMG13Grenades:HDGrenadethrower{
 	override void ForceBasicAmmo(){
 		owner.A_SetInventory("HDMG13GrenadeAmmo",1);
 	}
+	
+	states
+	{
+		deselectinstant:
+			TNT1 A -1 A_TakeInventory("HDMG13Grenades", 1);
+			stop;
+	}
 }
 
 class MG13TripwireGrenade:Tripwire{
@@ -183,6 +190,19 @@ class HDMG13GrenadeAmmo:HDAmmo{
 		hdpickup.bulk ENC_MG13GRENADE;
 	}
 	override bool IsUsed(){return true;}
+	override void AttachToOwner(Actor user)
+	{
+		user.GiveInventory("HDMG13Grenades", 1);
+		super.AttachToOwner(user);
+	}
+	override void DetachFromOwner()
+	{
+		if(!(owner.player.ReadyWeapon is "HDMG13Grenades"))
+		{
+			TakeInventory("HDMG13Grenades", 1);
+		}
+		super.DetachFromOwner();
+	}
 	states{
 	spawn:
 		MG13 A -1;stop;

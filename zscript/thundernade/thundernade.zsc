@@ -40,6 +40,13 @@ class HDThunderGrenades:HDGrenadethrower{
 	override void ForceBasicAmmo(){
 		owner.A_SetInventory("HDThunderGrenadeAmmo",1);
 	}
+	
+	states
+	{
+		deselectinstant:
+			TNT1 A -1 A_TakeInventory("HDThunderGrenades", 1);
+			stop;
+	}
 }
 
 class ThunderTripwireFrag:Tripwire{
@@ -178,8 +185,22 @@ class HDThunderGrenadeAmmo:HDAmmo{
 		tag "Thunder Grenades";
 		hdpickup.refid HDLD_GRE_THUNDER;
 		hdpickup.bulk ENC_THUNGRENADE;
+		+INVENTORY.KEEPDEPLETED
 	}
 	override bool IsUsed(){return true;}
+	override void AttachToOwner(Actor user)
+	{
+		user.GiveInventory("HDThunderGrenades", 1);
+		super.AttachToOwner(user);
+	}
+	override void DetachFromOwner()
+	{
+		if(!(owner.player.ReadyWeapon is "HDThunderGrenades"))
+		{
+			TakeInventory("HDThunderGrenades", 1);
+		}
+		super.DetachFromOwner();
+	}
 	states{
 	spawn:
 		TFRG A -1;stop;
