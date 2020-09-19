@@ -2,6 +2,7 @@ version "4.4"
 
 #include "zscript/thundernade/thundernade.zsc"
 #include "zscript/mg13/mg13.zsc"
+//#include "zscript/firecracker/firecracker.zsc"
 //#include "zscript/stone/stone.zsc"
 
 class ThunderGrenadeGiver : EventHandler
