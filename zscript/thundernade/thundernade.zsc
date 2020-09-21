@@ -1,6 +1,6 @@
 
 const HDLD_GRE_THUNDER="thg";
-const ENC_THUNGRENADE=ENC_FRAG*1.1;
+const ENC_THUNGRENADE=25;
 
 class HDThunderGrenades:HDGrenadethrower{
 	default{
