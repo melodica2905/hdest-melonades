@@ -14,7 +14,7 @@ detonated, levelling the entire building and killing atleast 80% of its personel
 */
 
 const HDLD_GRE_MG13="mg3";
-const ENC_MG13GRENADE=ENC_FRAG*4.5;
+const ENC_MG13GRENADE=103;
 
 class HDMG13Grenades:HDGrenadethrower{
 	default{
@@ -131,9 +131,11 @@ class HDMG13GrenadeRoller:HDFragGrenadeRoller{
 	destroy:
 		TNT1 A 1{
 			bsolid=false;bpushable=false;bmissile=false;bnointeraction=true;bshootable=false;
-			A_HDBlast(500,7500,400,
-				pushradius:512,pushamount:288,fullpushradius:256
-			);
+			A_HDBlast(500,10000,400,pushradius:512,pushamount:288,fullpushradius:256);
+			A_HDBlast(pushradius:512,pushamount:288,fullpushradius:256,fragradius:3000);
+			A_SpawnChunks("HDB_frag",360,300,900);
+			A_SpawnChunks("HDB_frag",360,300,900);
+			DistantQuaker.Quake(self,4,35,512,10);
 			DistantQuaker.Quake(self,4,35,512,10);
 			A_StartSound("world/explode",CHAN_AUTO);
 			A_AlertMonsters();
@@ -241,6 +243,6 @@ class HDSilentExplosion : HDExplosion
 {
 	default
 	{
-		deathsound "";
+		deathsound "none";
 	}
 }
