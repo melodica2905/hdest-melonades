@@ -19,6 +19,7 @@ const ENC_MG13GRENADE=103;
 class HDMG13Grenades:HDGrenadethrower{
 	default{
 		weapon.selectionorder 1000;
+		weapon.slotpriority 0;
 		weapon.slotnumber 0;
 		tag "MG13 Grenades";
 		hdgrenadethrower.ammotype "HDMG13GrenadeAmmo";

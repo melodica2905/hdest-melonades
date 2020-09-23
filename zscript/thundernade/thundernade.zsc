@@ -5,6 +5,7 @@ const ENC_THUNGRENADE=25;
 class HDThunderGrenades:HDGrenadethrower{
 	default{
 		weapon.selectionorder 1010;
+		weapon.slotpriority 1;
 		weapon.slotnumber 0;
 		tag "Thunder Grenades";
 		hdgrenadethrower.ammotype "HDThunderGrenadeAmmo";
