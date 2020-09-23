@@ -14,6 +14,17 @@ class HDThunderGrenades:HDGrenadethrower{
 		hdgrenadethrower.wiretype "ThunderTripwireFrag";
 		inventory.icon "TFRGA0";
 	}
+
+	override string gethelptext(){
+		if(weaponstatus[0]&FRAGF_SPOONOFF)return
+		WEPHELP_FIRE.."  Wind up, release to throw\n(\cxSTOP READING AND DO THIS"..WEPHELP_RGCOL..")";
+		return
+		WEPHELP_FIRE.."  Twist top/wind up (release to throw)\n"
+		..WEPHELP_ALTFIRE.."  Twist top, again to arm grenade\n"
+		..WEPHELP_RELOAD.."  Abort/untwist top\n"
+		..WEPHELP_ZOOM.."  Start planting tripwire traps"
+		;
+	}
 	
 	override string,double getpickupsprite(){return "TFRGA0",0.7;}
 	override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl){
@@ -216,6 +227,8 @@ class HDThunderSpoon : HDFragSpoon
 	}
 	states{
 	spawn:
+		TNT1 A 0;
+		stop;
 		TFPN A 2{roll+=40;}wait;
 	death:
 		TFPN A -1;
