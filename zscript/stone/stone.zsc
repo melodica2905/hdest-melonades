@@ -191,8 +191,11 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 	int GetDamage()
 	{
 		int dmg;
+		int aa1 = abs(vel.x)*abs(vel.x);
+		int aa2 = abs(vel.y)*abs(vel.y);
+		int aa3 = abs(vel.z)*abs(vel.z);
 		
-		dmg=(abs(vel.x) && abs(vel.y) && abs(vel.z))*random(5,10);
+		dmg=sqrt(aa1+aa2+aa3)*2;
 		
 		return dmg;
 	}
@@ -217,8 +220,11 @@ class HDStoneGrenade:HDFragGrenade{
 	int GetDamage()
 	{
 		int dmg;
+		int aa1 = abs(vel.x)*abs(vel.x);
+		int aa2 = abs(vel.y)*abs(vel.y);
+		int aa3 = abs(vel.z)*abs(vel.z);
 		
-		dmg=(abs(vel.x) && abs(vel.y) && abs(vel.z))*random(5,10);
+		dmg=sqrt(aa1+aa2+aa3)*2;
 		
 		return dmg;
 	}
