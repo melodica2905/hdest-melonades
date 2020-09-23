@@ -154,6 +154,7 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 		+ROLLSPRITE
 		+ROLLCENTER
 		DamageFunction GetDamage();
+		damagetype "bashing";
 	}
 	states{
 	spawn:
@@ -205,6 +206,7 @@ class HDStoneGrenade:HDFragGrenade{
 		+ROLLSPRITE
 		+ROLLCENTER
 		DamageFunction GetDamage();
+		damagetype "bashing";
 	}
 	states
 	{
