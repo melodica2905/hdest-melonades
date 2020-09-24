@@ -269,7 +269,11 @@ class HDStoneGrenade:HDFragGrenade{
 		//int stunned;
 		//int incapacitated;
 		//int incaptimer;
-		if(self.GetDamage() >= 33 && victim.bISMONSTER && victim.health > 0 && (victim is "HDMobMan" || victim is "Serpentipede" || victim is "Boner") && !victim.InStateSequence(victim.CurState, victim.ResolveState("falldown")))
+		if(victim is "VulcanetteGuy")
+		{
+			return -1;
+		}
+		else if(GetDamage() >= 66 && victim.bISMONSTER && victim.health > 0 && (victim is "HDMobMan" || victim is "Serpentipede" || victim is "Boner") && !victim.InStateSequence(victim.CurState, victim.ResolveState("falldown")))
 		{
 			//stunned = 1;
 			victim.SetStateLabel("falldown");
