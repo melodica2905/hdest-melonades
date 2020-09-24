@@ -246,6 +246,7 @@ class HDStoneGrenade:HDFragGrenade{
 		Mass 50;
 		+ROLLSPRITE
 		+ROLLCENTER
+		+FORCEPAIN
 		DamageFunction GetDamage();
 		damagetype "bashing";
 	}
