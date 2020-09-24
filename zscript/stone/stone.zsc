@@ -193,6 +193,7 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 		+ROLLCENTER
 		DamageFunction GetDamage();
 		damagetype "bashing";
+		deathsound "stone/impact";
 	}
 	states{
 	spawn:
@@ -249,6 +250,7 @@ class HDStoneGrenade:HDFragGrenade{
 		+FORCEPAIN
 		DamageFunction GetDamage();
 		damagetype "bashing";
+		deathsound "stone/impact";
 	}
 	states
 	{
