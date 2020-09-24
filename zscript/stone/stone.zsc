@@ -74,6 +74,27 @@ class HDStoneGrenades:HDGrenadethrower{
 		A_TakeInventory(invoker.grenadeammotype,1,TIF_NOTAKEINFINITE);
 	}
 	
+	Action void A_ReturnHandToOwnerStone(){invoker.ReturnHandToOwnerStone();}
+	void ReturnHandToOwnerStone(){
+		if(!owner)return;
+		int wepstat=weaponstatus[0];
+		if(wepstat&FRAGF_INHAND){
+			if(wepstat&FRAGF_SPOONOFF)TossGrenade(true);
+			else{
+				if(wepstat&FRAGF_PINOUT){
+					weaponstatus[0]&=~FRAGF_PINOUT;
+				}
+				if(
+					owner.A_JumpIfInventory(grenadeammotype,0,"null")
+				)owner.A_DropItem(grenadeammotype);
+				else HDF.Give(owner,grenadeammotype,1);
+			}
+		}
+		weaponstatus[0]&=~FRAGF_INHAND;
+		weaponstatus[FRAGS_FORCE]=0;
+		weaponstatus[FRAGS_REALLYPULL]=0;
+	}
+	
 	states
 	{
 	ready:
@@ -143,6 +164,23 @@ class HDStoneGrenades:HDGrenadethrower{
 		FRGG A 1 offset(0,52);
 		FRGG A 0 A_Refire();
 		goto ready;
+		reload:
+		TNT1 A 0 A_JumpIf(NoFrags(),"selectinstant");
+		TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE]>=1,"pinbackin");
+		TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_PINOUT,"altpinbackin");
+		goto ready;
+	pinbackin:
+		FRGG B 1 offset(0,34) A_ReturnHandToOwnerStone();
+		FRGG B 1 offset(0,36);
+		FRGG B 1 offset(0,38);
+	altpinbackin:
+		FRGG A 0 A_JumpIf(invoker.weaponstatus[FRAGS_TIMER]>0,"juststopthrowing");
+		TNT1 A 1 A_ReturnHandToOwnerStone();
+		TNT1 A 0 A_Refire("nope");
+		FRGG B 1 offset(0,38);
+		FRGG B 1 offset(0,36);
+		FRGG B 1 offset(0,34);
+		goto ready;
 	}
 }
 
@@ -195,7 +233,7 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 		int aa2 = abs(vel.y)*abs(vel.y);
 		int aa3 = abs(vel.z)*abs(vel.z);
 		
-		dmg=sqrt(aa1+aa2+aa3)*2;
+		dmg=sqrt(aa1+aa2+aa3)*3.5;
 		
 		return dmg;
 	}
@@ -224,7 +262,7 @@ class HDStoneGrenade:HDFragGrenade{
 		int aa2 = abs(vel.y)*abs(vel.y);
 		int aa3 = abs(vel.z)*abs(vel.z);
 		
-		dmg=sqrt(aa1+aa2+aa3)*2;
+		dmg=sqrt(aa1+aa2+aa3)*3.5;
 		
 		return dmg;
 	}
