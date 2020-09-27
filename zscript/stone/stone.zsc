@@ -279,7 +279,7 @@ class HDStoneGrenade:HDFragGrenade{
 			victim.SetStateLabel("falldown");
 			return -1;
 		}
-		if(self.GetDamage() >= 30 && victim.health > 0 && victim is "HDPlayerPawn" && !HDPlayerPawn(victim).incapacitated && victim != target)
+		else if(GetDamage() >= 30 && victim.health > 0 && victim is "HDPlayerPawn" && !HDPlayerPawn(victim).incapacitated && victim != target)
 		{
 			HDPlayerPawn(victim).A_Incapacitated( HDPlayerPawn.HDINCAP_SCREAM, 35 );
 			return -1;
