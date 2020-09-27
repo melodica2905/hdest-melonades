@@ -269,7 +269,7 @@ class HDStoneGrenade:HDFragGrenade{
 		//int stunned;
 		//int incapacitated;
 		//int incaptimer;
-		else if(GetDamage() >= 66 && victim.health > 0 && HDMobBase(victim) && !HDMobBase(victim).bNOINCAP && victim.ResolveState("falldown") && !victim.InStateSequence(victim.CurState, victim.ResolveState("falldown")))
+		if(GetDamage() >= 66 && victim.health > 0 && HDMobBase(victim) && !HDMobBase(victim).bNOINCAP && victim.ResolveState("falldown") && !victim.InStateSequence(victim.CurState, victim.ResolveState("falldown")))
 		{
 			//stunned = 1;
 			victim.SetStateLabel("falldown");
