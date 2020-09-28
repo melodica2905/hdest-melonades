@@ -285,7 +285,8 @@ class HDStoneGrenade:HDFragGrenade{
 			victim.incaptimer = 35;
 			return -1;
 		}*/
-		return -1;
+		else
+			return -1;
 	}
 	
 	states
