@@ -355,6 +355,23 @@ class StoneGrenadeP:HDUPK{
 	}
 }
 
+class StonePileSpawner : Actor{
+	states{
+	spawn:
+		TNT1 A 0 NODELAY A_DropItem("HDStoneGrenadeAmmo", 1, 256);
+		TNT1 AA 0 A_DropItem("HDStoneGrenadeAmmo", 1, 256);
+		TNT1 AAAAAAAAAAAA 0 A_DropItem("HDStoneGrenadeAmmo", 1, 80);
+		stop;
+	}
+}
+
+class ChainsawSpawner : RandomSpawner replaces Chainsaw{
+	default{
+		dropitem "lumberjack", 256, 100;
+		dropitem "StonePileSpawner", 256, 15;
+	}
+}
+
 class NoSpoonForU : Actor
 {
 	states
