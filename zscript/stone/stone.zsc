@@ -367,8 +367,8 @@ class StonePileSpawner : Actor{
 
 class ChainsawSpawner : RandomSpawner replaces Chainsaw{
 	default{
-		dropitem "lumberjack", 256, 100;
-		dropitem "StonePileSpawner", 256, 15;
+		dropitem "lumberjack", 256;
+		//dropitem "StonePileSpawner", 256, 15;
 	}
 }
 
