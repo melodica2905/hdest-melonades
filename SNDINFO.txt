@@ -1,2 +1,2 @@
-$volume stone/impact 0.5
+$volume stone/impact 0.75
 stone/impact dspunch
