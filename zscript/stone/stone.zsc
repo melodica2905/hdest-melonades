@@ -284,7 +284,8 @@ class HDStoneGrenade:HDFragGrenade{
 			HDPlayerPawn(victim).A_Incapacitated( HDPlayerPawn.HDINCAP_SCREAM, 35 );
 			return -1;
 		}
-		return -1;
+		else
+			return -1;
 	}
 	
 	states
@@ -350,6 +351,23 @@ class StoneGrenadeP:HDUPK{
 	states{
 	spawn:
 		STNE A -1;
+	}
+}
+
+class StonePileSpawner : Actor{
+	states{
+	spawn:
+		TNT1 A 0 NODELAY A_DropItem("HDStoneGrenadeAmmo", 1, 256);
+		TNT1 AA 0 A_DropItem("HDStoneGrenadeAmmo", 1, 256);
+		TNT1 AAAAAAAAAAAA 0 A_DropItem("HDStoneGrenadeAmmo", 1, 80);
+		stop;
+	}
+}
+
+class ChainsawSpawner : RandomSpawner replaces Chainsaw{
+	default{
+		dropitem "lumberjack", 256;
+		//dropitem "StonePileSpawner", 256, 15;
 	}
 }
 
