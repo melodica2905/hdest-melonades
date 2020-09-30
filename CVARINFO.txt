@@ -1,0 +1,1 @@
+server int melonade_spawns = 0;

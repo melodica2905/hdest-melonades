@@ -1,0 +1,17 @@
+AddOptionMenu "OptionsMenu"
+{
+	Submenu "Melonades", "MelonadesMenu"
+}
+
+OptionMenu "MelonadesMenu"
+{
+	Title "Melonades Options"
+	
+	// [Ace] You can have up to 32 of these. On a single CVar, that is.
+	// Would have been 64 if GZDoom integers were 8-bytes but oh well.
+	StaticText "----- Grenade Spawns -----", "Gold"
+	MelonadeSpawnOption "Thunder Grenades", "melonade_spawns", "YesNo", 0
+	MelonadeSpawnOption "MG13 Grenades", "melonade_spawns", "YesNo", 1
+	MelonadeSpawnOption "Stones", "melonade_spawns", "YesNo", 2
+	Command "Disable All", "melonade_spawns 0"
+}

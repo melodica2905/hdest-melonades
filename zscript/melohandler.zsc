@@ -1,0 +1,61 @@
+//Thanks Accensus for taking the time to make this for Peppergrinder and
+//allowing me to adapt it for Melonades!
+
+class MelonadeInjectorData
+{
+	class<Actor> Item;
+	class<Actor> Spawner;
+	int Chance;
+
+	static MelonadeInjectorData Create(class<Actor> item, class<Actor> spawner, int ch)
+	{
+		MelonadeInjectorData Data = new("MelonadeInjectorData");
+		Data.Item = item;
+		Data.Spawner = spawner;
+		Data.Chance = ch;
+		return Data;
+	}
+}
+
+class MelonadeInjector : StaticEventHandler
+{
+	enum MelonadeSpawnFlags
+	{
+		WSF_Thundernade		= 1 << 0,
+		WSF_MG13			= 1 << 1,
+		WSF_Stone			= 1 << 2,
+	}
+
+	override void WorldLoaded(WorldEvent e)
+	{
+		SpawnData.Clear();
+
+		int MelonadeSpawns = melonade_spawns;
+
+		if (MelonadeSpawns & WSF_Thundernade)	
+		{ 
+			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"CellPackReplacer",		24)); 
+			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"RocketBoxRandom",		36)); 
+		}
+		if (MelonadeSpawns & WSF_MG13)			{ SpawnData.Push(MelonadeInjectorData.Create("MG13GrenadeP",			"ChainsawSpawner",	8)); }
+		if (MelonadeSpawns & WSF_Stone)			{ SpawnData.Push(MelonadeInjectorData.Create("StonePileSpawner",		"ChainsawSpawner",	40)); }
+	}
+	
+	override void CheckReplacement(ReplaceEvent e)
+	{
+		if (!e.Replacement)
+		{
+			return;
+		}
+
+		for (int i = 0; i < SpawnData.Size(); ++i)
+		{
+			if (e.Replacement == SpawnData[i].Spawner && random[saltrand]() <= SpawnData[i].Chance)
+			{
+				e.Replacement = SpawnData[i].Item;
+			}
+		}
+	}
+
+	private Array<MelonadeInjectorData> SpawnData;
+}
