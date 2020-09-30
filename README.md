@@ -1,7 +1,7 @@
 # Melonades (Melodica's Custom Grenades)
 Custom grenades for Hideous Destructor.
 
-Has support for Accensus's Injector.
+Has a menu where you can toggle or enable grenade spawns in the wild to your liking. Does not affect appearances in backpacks!
 
 **Currently adds:**
 *  Thunder Grenades **(loadout code THG)**
