@@ -252,6 +252,27 @@ class HDStoneGrenade:HDFragGrenade{
 		damagetype "bashing";
 		deathsound "stone/impact";
 	}
+	
+	override void tick(){
+		ClearInterpolation();
+		if(isfrozen())return;
+		if(!bmissile){
+			hdactor.tick();return;
+		}else if(fuze<140){
+			fuze++;
+			keeprolling=vel;
+			super.tick();
+		}else{
+			if(inthesky){
+				destroy();return;
+			}
+			let gr=HDFragGrenadeRoller(spawn(rollertype,pos,ALLOW_REPLACE));
+			gr.target=self.target;gr.master=self.master;gr.vel=self.vel;
+			gr.fuze=fuze;
+			destroy();return;
+		}
+	}
+	
 	int GetDamage()
 	{
 		int dmg;
