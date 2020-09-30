@@ -50,7 +50,7 @@ class MelonadeInjector : StaticEventHandler
 
 		for (int i = 0; i < SpawnData.Size(); ++i)
 		{
-			if (e.Replacement == SpawnData[i].Spawner && random[saltrand]() <= SpawnData[i].Chance)
+			if (e.Replacement == SpawnData[i].Spawner && random[melorand]() <= SpawnData[i].Chance)
 			{
 				e.Replacement = SpawnData[i].Item;
 			}
