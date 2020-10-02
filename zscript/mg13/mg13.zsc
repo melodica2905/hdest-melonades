@@ -72,6 +72,24 @@ class MG13TripwireGrenade:Tripwire{
 		tripwire.spoontype "HDMG13Spoon";
 		tripwire.weptype "HDMG13Grenades";
 	}
+	override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl){
+		if(sb.hudlevel==1){
+			sb.drawimage("MG13A0",(-52,-4),sb.DI_SCREEN_CENTER_BOTTOM,scale:(0.8,0.8));
+			sb.drawnum(hpl.countinv("HDMG13GrenadeAmmo"),-45,-8,sb.DI_SCREEN_CENTER_BOTTOM);
+		}
+		sb.drawwepnum(
+			hpl.countinv("HDMG13GrenadeAmmo"),
+			(ENC_FRAG/HDCONST_MAXPOCKETSPACE)
+		);
+		sb.drawwepnum(hdw.weaponstatus[FRAGS_FORCE],50,posy:-10,alwaysprecise:true);
+		if(!(hdw.weaponstatus[0]&FRAGF_SPOONOFF)){
+			sb.drawrect(-21,-19,5,4);
+			if(!(hdw.weaponstatus[0]&FRAGF_PINOUT))sb.drawrect(-25,-18,3,2);
+		}else{
+			int timer=hdw.weaponstatus[FRAGS_TIMER];
+			if(timer%3)sb.drawwepnum(140-timer,140,posy:-15,alwaysprecise:true);
+		}
+	}
 }
 
 class MG13TrippingFrag:TrippingGrenade{
