@@ -1,2 +1,4 @@
 Thunder grenade sprites edited from the FreeDoom armor bonus.
 Stone sprites from Metal Slug.
+
+nicothegoat: simplifying the stone incap check and making it also incap players, thank you!
