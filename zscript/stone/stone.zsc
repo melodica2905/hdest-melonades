@@ -220,6 +220,7 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 			tracer.SetStateLabel("spawn2");
 			tracer.A_Stop();
 		}
+		TNT1 A 1;
 		stop;
 	}
 	int GetDamage()
