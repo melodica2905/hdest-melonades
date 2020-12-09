@@ -4,7 +4,8 @@ const ENC_AGODDAMNSTONE=18;
 
 class HDStoneGrenades:HDGrenadethrower{
 	default{
-		weapon.selectionorder 1005;
+		weapon.selectionorder 1000;
+		weapon.slotpriority 0.9;
 		weapon.slotnumber 0;
 		tag "Stones";
 		hdgrenadethrower.ammotype "HDStoneGrenadeAmmo";
