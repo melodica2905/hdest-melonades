@@ -354,5 +354,7 @@ class HDImpactGrenadePickup:ImpactFragP{
 		A_SpawnItemEx("ImpactFragP",5,5,flags:SXF_NOCHECKPOSITION);
 		A_SpawnItemEx("ImpactFragP",5,0,flags:SXF_NOCHECKPOSITION);
 		A_SpawnItemEx("ImpactFragP",0,5,flags:SXF_NOCHECKPOSITION);
+		A_SpawnItemEx("ImpactFragP",-5,5,flags:SXF_NOCHECKPOSITION);
+		A_SpawnItemEx("ImpactFragP",-5,0,flags:SXF_NOCHECKPOSITION);
 	}
 }

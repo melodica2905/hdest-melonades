@@ -24,6 +24,7 @@ class MelonadeInjector : StaticEventHandler
 		WSF_Thundernade		= 1 << 0,
 		WSF_MG13			= 1 << 1,
 		WSF_Stone			= 1 << 2,
+		WSF_Impactnade		= 1 << 3,
 	}
 
 	override void WorldLoaded(WorldEvent e)
@@ -35,10 +36,14 @@ class MelonadeInjector : StaticEventHandler
 		if (MelonadeSpawns & WSF_Thundernade)	
 		{ 
 			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"CellPackReplacer",		24)); 
-			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"RocketBoxRandom",		36)); 
+			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"RocketBoxRandom",		24)); 
 		}
 		if (MelonadeSpawns & WSF_MG13)			{ SpawnData.Push(MelonadeInjectorData.Create("MG13GrenadeP",			"Lumberjack",	8)); }
 		if (MelonadeSpawns & WSF_Stone)			{ SpawnData.Push(MelonadeInjectorData.Create("StonePileSpawner",		"Lumberjack",	40)); }
+		if (MelonadeSpawns & WSF_Impactnade)	
+		{
+			SpawnData.Push(MelonadeInjectorData.Create("HDImpactGrenadePickup",					"RocketBoxRandom",		48)); 
+		}
 	}
 	
 	override void CheckReplacement(ReplaceEvent e)

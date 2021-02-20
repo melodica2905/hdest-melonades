@@ -13,5 +13,6 @@ OptionMenu "MelonadesMenu"
 	MelonadeSpawnOption "Thunder Grenades", "melonade_spawns", "YesNo", 0
 	MelonadeSpawnOption "MG13 Grenades", "melonade_spawns", "YesNo", 1
 	MelonadeSpawnOption "Stones", "melonade_spawns", "YesNo", 2
+	MelonadeSpawnOption "Impact Grenades", "melonade_spawns", "YesNo", 3
 	Command "Disable All", "melonade_spawns 0"
 }
