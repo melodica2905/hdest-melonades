@@ -5,5 +5,6 @@ Has a menu where you can toggle grenade spawns in the wild to your liking. Does 
 
 **Currently adds:**
 *  Thunder Grenades **(loadout code THG)**
+*  Impact Grenades **(loadout code IMG)**
 *  MG13 Grenades from EDF **(loadout code MG3)**
 *  A rock **(loadout code STN)**
