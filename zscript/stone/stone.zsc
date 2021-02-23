@@ -226,14 +226,14 @@ class HDStoneGrenadeRoller:HDFragGrenadeRoller{
 	}
 	int GetDamage()
 	{
-		int dmg;
-		int aa1 = abs(vel.x)*abs(vel.x);
-		int aa2 = abs(vel.y)*abs(vel.y);
-		int aa3 = abs(vel.z)*abs(vel.z);
+		double dmg;
+		double aa1 = abs(vel.x)*abs(vel.x);
+		double aa2 = abs(vel.y)*abs(vel.y);
+		double aa3 = abs(vel.z)*abs(vel.z);
 		
 		dmg=sqrt(aa1+aa2+aa3)*3.5;
 		
-		return dmg;
+		return int(dmg);
 	}
 }
 class HDStoneGrenade:HDFragGrenade{
@@ -272,14 +272,14 @@ class HDStoneGrenade:HDFragGrenade{
 	
 	int GetDamage()
 	{
-		int dmg;
-		int aa1 = abs(vel.x)*abs(vel.x);
-		int aa2 = abs(vel.y)*abs(vel.y);
-		int aa3 = abs(vel.z)*abs(vel.z);
+		double dmg;
+		double aa1 = abs(vel.x)*abs(vel.x);
+		double aa2 = abs(vel.y)*abs(vel.y);
+		double aa3 = abs(vel.z)*abs(vel.z);
 		
 		dmg=sqrt(aa1+aa2+aa3)*3.5;
 		
-		return dmg;
+		return int(dmg);
 	}
 	
 	override int SpecialMissileHit (Actor victim)
