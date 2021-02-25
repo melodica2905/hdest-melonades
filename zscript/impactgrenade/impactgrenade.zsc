@@ -12,7 +12,7 @@ class HDImpactGrenades:HDGrenadethrower{
 		hdgrenadethrower.throwtype "HDImpactGrenade";
 		hdgrenadethrower.spoontype "HDImpactSpoon";
 		hdgrenadethrower.wiretype "ImpactTripwireFrag";
-		inventory.icon "TFRGA0";
+		inventory.icon "IMPGA0";
 	}
 
 	override string gethelptext(){
