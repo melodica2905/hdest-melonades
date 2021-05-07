@@ -136,7 +136,7 @@ class HDStoneGrenades:HDGrenadethrower{
 		TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE]>=1,"hold2");
 		TNT1 A 0 A_JumpIfInventory("PowerStrength",1,1);
 		TNT1 A 0 A_JumpIf(NoFrags(),"selectinstant");
-		TNT1 A 3 A_PullPinStone();
+		TNT1 A 1 A_PullPinStone();
 	hold2:
 		TNT1 A 0 A_JumpIf(NoFrags(),"selectinstant");
 		FRGG E 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE]>=40,"hold3a");
@@ -146,14 +146,14 @@ class HDStoneGrenades:HDGrenadethrower{
 		goto hold3;
 	hold3a:
 		FRGG # 0{
-			if(invoker.weaponstatus[FRAGS_FORCE]<50)invoker.weaponstatus[FRAGS_FORCE]++;
+			if(invoker.weaponstatus[FRAGS_FORCE]<50)invoker.weaponstatus[FRAGS_FORCE]+=3;
 		}
 	hold3:
 		FRGG # 1{
 			A_WeaponReady(
 				invoker.weaponstatus[0]&FRAGF_SPOONOFF?WRF_NOFIRE:WRF_NOFIRE|WRF_ALLOWRELOAD
 			);
-			if(invoker.weaponstatus[FRAGS_FORCE]<50)invoker.weaponstatus[FRAGS_FORCE]++;
+			if(invoker.weaponstatus[FRAGS_FORCE]<50)invoker.weaponstatus[FRAGS_FORCE]+=3;
 		}
 		TNT1 A 0 A_Refire();
 		goto throw;
@@ -284,12 +284,8 @@ class HDStoneGrenade:HDFragGrenade{
 	
 	override int SpecialMissileHit (Actor victim)
 	{
-		//int stunned;
-		//int incapacitated;
-		//int incaptimer;
 		if(GetDamage() >= 66 && victim.health > 0 && HDMobBase(victim) && !HDMobBase(victim).bNOINCAP && victim.ResolveState("falldown") && !victim.InStateSequence(victim.CurState, victim.ResolveState("falldown")))
 		{
-			//stunned = 1;
 			victim.SetStateLabel("falldown");
 			return -1;
 		}
