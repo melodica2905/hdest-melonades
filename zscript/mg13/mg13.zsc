@@ -209,6 +209,7 @@ class HDMG13GrenadeAmmo:HDAmmo{
 		tag "MG13 Grenades";
 		hdpickup.refid HDLD_GRE_MG13;
 		hdpickup.bulk ENC_MG13GRENADE;
+		+INVENTORY.KEEPDEPLETED
 	}
 	override bool IsUsed(){return true;}
 	override void AttachToOwner(Actor user)
