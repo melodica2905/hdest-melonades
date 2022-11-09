@@ -14,7 +14,7 @@ detonated, levelling the entire building and killing atleast 80% of its personel
 */
 
 const HDLD_GRE_MG13="mg3";
-const ENC_MG13GRENADE=103;
+const ENC_MG13GRENADE=133;
 
 class HDMG13Grenades:HDGrenadethrower{
 	default{
@@ -148,34 +148,34 @@ class HDMG13GrenadeRoller:HDFragGrenadeRoller{
 			if(abs(vel.x)>0.4 || abs(vel.y)>0.4) setstatelabel("spawn");
 		}wait;
 	destroy:
-		TNT1 A 1{
+		TNT1 A 3{
 			bsolid=false;bpushable=false;bmissile=false;bnointeraction=true;bshootable=false;
-			A_HDBlast(500,10000,400,pushradius:512,pushamount:288,fullpushradius:256);
-			A_HDBlast(pushradius:512,pushamount:288,fullpushradius:256,fragradius:3000);
-			A_SpawnChunks("HDB_frag",360,300,900);
-			A_SpawnChunks("HDB_frag",360,300,900);
+			A_HDBlast(
+				512,20000,256,"slashing",
+				pushradius:512,pushamount:2560,
+				fragradius: HDCONST_ONEMETRE*50, fragtype: "HDB_frag",
+				immolateradius:512,immolateamount:-500,immolatechance:90
+			);
+			A_SpawnChunksFrags("HDB_frag", 360, 1.);
+			//A_SpawnChunksFrags("HDB_frag", 360, 2.);
 			DistantQuaker.Quake(self,4,35,512,10);
 			DistantQuaker.Quake(self,4,35,512,10);
-			A_StartSound("world/explode",CHAN_AUTO);
+			A_StartSound("mg13/explode",CHAN_AUTO);
 			A_AlertMonsters();
 			actor xpl=spawn("WallChunker",self.pos-(0,0,1),ALLOW_REPLACE);
 				xpl.target=target;xpl.master=master;xpl.stamina=stamina;
-			xpl=spawn("HDExplosion",self.pos-(0,0,1),ALLOW_REPLACE);
+			xpl=spawn("HDSilentExplosion",self.pos-(0,0,1),ALLOW_REPLACE);
 				xpl.target=target;xpl.master=master;xpl.stamina=stamina;
 			A_SpawnChunks("BigWallChunk",14,4,12);
 			distantnoise.make(self,"world/rocketfar");
 			
-			for(int i; i < 18; i++)
+			A_SpawnChunks("HDMG13Smoke", 20, 10, 15);
+			A_SpawnItemEx("HDSilentExplosionBigger2",0,0,0, flags: SXF_NOCHECKPOSITION | SXF_ORIGINATOR | SXF_SETMASTER);
+			for(int i; i < 8; i++)
 			{
-				A_SetAngle(angle+20);
-				A_SpawnItemEx("HDExplosion",300+frandom(-15,15),0,32);
-				A_SpawnItemEx("HDSmoke",300+frandom(-15,15),0,32);
-				A_SpawnItemEx("HDSilentExplosion",250+frandom(-15,15),0,64);
-				A_SpawnItemEx("HDSmoke",200+frandom(-15,15),0,64);
-				A_SpawnItemEx("HDSilentExplosion",150+frandom(-15,15),0,96);
-				A_SpawnItemEx("HDSmoke",100+frandom(-15,15),0,96);
-				A_SpawnItemEx("HDSilentExplosion",50+frandom(-15,15),0,128);
-				A_SpawnItemEx("HDSmoke",50+frandom(-15,15),0,128);
+				A_SetAngle(angle+45);
+				A_SpawnItemEx("HDSilentExplosionBigger",256+random(-32,32),random(-32,32),random(0, 64), flags: SXF_NOCHECKPOSITION | SXF_ORIGINATOR | SXF_SETMASTER );
+				A_SpawnItemEx("HDSilentExplosionBigger",128+random(-32,32),random(-32,32),random(0, 64), flags: SXF_NOCHECKPOSITION | SXF_ORIGINATOR | SXF_SETMASTER );
 			}
 		}
 		stop;
@@ -264,5 +264,83 @@ class HDSilentExplosion : HDExplosion
 	default
 	{
 		deathsound "none";
+	}
+}
+
+class HDSilentExplosionBigger : HDExplosion
+{
+	default
+	{
+		scale 3.5;
+		deathsound "none";
+		//-NOINTERACTION
+	}
+	states
+	{
+	spawn:
+		MISL B 0 NODELAY A_JumpIfTargetInLOS("death", 0, JLOSF_CHECKMASTER | JLOSF_CLOSENOJUMP, dist_close: 64);
+	begone:
+		TNT1 A 1;// A_SpawnItemEx("HDMG13Smoke", 0,0,0, vel.x+frandom(-2,2),vel.y+frandom(-2,2),vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS);
+		stop;
+	death:
+		MISL B 0{
+			if(max(abs(pos.x),abs(pos.y),abs(pos.z))>=32768){destroy();return;}
+			vel.z+=2;
+			A_StartSound(deathsound,CHAN_BODY);
+			let xxx=spawn("HDExplosionLight",pos);
+			xxx.target=self;
+		}
+		MISL BBBB 0 A_SpawnItemEx("ParticleWhiteSmall", 0,0,0, vel.x+random(-2,2),vel.y+random(-2,2),vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS);
+		MISL BB 0 A_SpawnItemEx("HDMG13Smoke", 0,0,0, vel.x+frandom(-2,2),vel.y+frandom(-2,2),vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS);
+		MISL B 0 A_Jump(256,"fade");
+	fade:
+		MISL B 3 A_FadeOut(0.1);
+		MISL C 3 A_FadeOut(0.2);
+		MISL DD 3 A_FadeOut(0.2);
+		TNT1 A 20;
+		stop;
+	}
+}
+
+class HDSilentExplosionBigger2 : HDExplosion
+{
+	default
+	{
+		yscale 4.5;
+		xscale 5.0;
+		deathsound "none";
+	}
+	states
+	{
+	spawn:
+	death:
+		MISL B 0{
+			if(max(abs(pos.x),abs(pos.y),abs(pos.z))>=32768){destroy();return;}
+			vel.z+=2;
+			A_StartSound(deathsound,CHAN_BODY);
+			let xxx=spawn("HDExplosionLight",pos);
+			xxx.target=self;
+		}
+		MISL BBBB 0 A_SpawnItemEx("ParticleWhiteSmall", 0,0,0, vel.x+random(-2,2),vel.y+random(-2,2),vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS);
+		MISL BB 0 A_SpawnItemEx("HDMG13Smoke", 0,0,0, vel.x+frandom(-2,2),vel.y+frandom(-2,2),vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS);
+		MISL B 0 A_Jump(256,"fade");
+	fade:
+		MG3X A 2 A_FadeOut(0.1);
+		MG3X B 2 A_FadeOut(0.1);
+		MG3X CDE 2 A_FadeOut(0.1);
+		TNT1 A 20;
+		stop;
+	}
+}
+
+class HDMG13Smoke : HDSmoke
+{
+	default{
+		scale 2.0;gravity 0.05;alpha 0.7;
+		hdpuff.fadeafter 7;
+		hdpuff.decel 0.95;
+		hdpuff.fade 0.99;
+		hdpuff.grow 0.07;
+		hdpuff.minalpha 0.005;
 	}
 }

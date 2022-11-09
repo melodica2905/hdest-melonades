@@ -1,2 +1,7 @@
 $volume stone/impact 0.75
-stone/impact dspunch
+stone/impact 	dspunch
+
+mg13/explode	dsbarexp 
+$limit mg13/explode 0
+$rolloff mg13/explode linear 1200 1600
+$alias mg13/explodefar world/rocketfar
