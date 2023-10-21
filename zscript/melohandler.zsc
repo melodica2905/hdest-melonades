@@ -38,8 +38,8 @@ class MelonadeInjector : StaticEventHandler
 			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"CellPackReplacer",		24)); 
 			SpawnData.Push(MelonadeInjectorData.Create("HDThunderGrenadePickup",				"RocketBoxRandom",		24)); 
 		}
-		if (MelonadeSpawns & WSF_MG13)			{ SpawnData.Push(MelonadeInjectorData.Create("MG13GrenadeP",			"Lumberjack",	8)); }
-		if (MelonadeSpawns & WSF_Stone)			{ SpawnData.Push(MelonadeInjectorData.Create("StonePileSpawner",		"Lumberjack",	40)); }
+		if (MelonadeSpawns & WSF_MG13)			{ SpawnData.Push(MelonadeInjectorData.Create("MG13GrenadeP",			"ChainsawReplaces",	8)); }
+		if (MelonadeSpawns & WSF_Stone)			{ SpawnData.Push(MelonadeInjectorData.Create("StonePileSpawner",		"ChainsawReplaces",	40)); }
 		if (MelonadeSpawns & WSF_Impactnade)	
 		{
 			SpawnData.Push(MelonadeInjectorData.Create("HDImpactGrenadePickup",					"RocketBoxRandom",		48)); 
