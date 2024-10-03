@@ -4,3 +4,4 @@ MG13 sprites by Yholl. Thank you!
 MG13 vertical explosion by Amuscaria.
 
 nicothegoat: simplifying the stone incap check and making it also incap players, thank you!
+phantombeta: telling me how to fix a vm abort that im pretty sure has been there for months, that i've never actually been able to reproduce on my own but kept getting reports of in the discord (they all may or may not be related to the same issue??? regardless) thanks!

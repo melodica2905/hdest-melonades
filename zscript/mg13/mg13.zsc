@@ -184,7 +184,7 @@ class HDMG13GrenadeRoller:HDFragGrenadeRoller{
 class HDMG13Grenade:HDFragGrenade{
 	default{
 		scale 0.65;
-		obituary "%o was fragged by %k.";
+		obituary "%o was evaporated by %k.";
 		hdfraggrenade.rollertype "HDMG13GrenadeRoller";
 		Mass 1500;
 	}
@@ -219,9 +219,9 @@ class HDMG13GrenadeAmmo:HDAmmo{
 	}
 	override void DetachFromOwner()
 	{
-		if(!(owner.player.ReadyWeapon is "HDMG13Grenades"))
+		if(owner && owner.player && !(owner.player.ReadyWeapon is "HDMG13Grenades"))
 		{
-			TakeInventory("HDMG13Grenades", 1);
+			owner.TakeInventory("HDMG13Grenades", 1);
 		}
 		super.DetachFromOwner();
 	}
