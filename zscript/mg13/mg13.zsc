@@ -30,17 +30,21 @@ class HDMG13Grenades:HDGrenadethrower{
 	}
 	
 	override string,double getpickupsprite(){return "MG13A0",0.8;}
+	override string GetStatusIcon(){
+		return (weaponstatus[0]&FRAGF_PINOUT)?"MG13F0":"MG13A0";
+	}
 	override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl){
+		let statusicon=GetStatusIcon();
 		if(sb.hudlevel==1){
 			sb.drawimage(
-				(weaponstatus[0]&FRAGF_PINOUT)?"MG13F0":"MG13A0",
-				(-52,-4),sb.DI_SCREEN_CENTER_BOTTOM,scale:(0.8,0.8)
+				statusicon,
+				(-52,-4),sb.DI_SCREEN_CENTER_BOTTOM,scale:(0.6,0.6)
 			);
-			sb.drawnum(hpl.countinv("HDMG13GrenadeAmmo"),-45,-8,sb.DI_SCREEN_CENTER_BOTTOM);
+			sb.drawnum(hpl.countinv(grenadeammotype),-45,-8,sb.DI_SCREEN_CENTER_BOTTOM);
 		}
 		sb.drawwepnum(
 			hpl.countinv("HDMG13GrenadeAmmo"),
-			(HDCONST_MAXPOCKETSPACE/ENC_FRAG)
+					  (HDCONST_MAXPOCKETSPACE/ENC_MG13GRENADE)
 		);
 		sb.drawwepnum(hdw.weaponstatus[FRAGS_FORCE],50,posy:-10,alwaysprecise:true);
 		if(!(hdw.weaponstatus[0]&FRAGF_SPOONOFF)){
@@ -50,7 +54,23 @@ class HDMG13Grenades:HDGrenadethrower{
 			int timer=hdw.weaponstatus[FRAGS_TIMER];
 			if(timer%3)sb.drawwepnum(140-timer,140,posy:-15,alwaysprecise:true);
 		}
+
+		//draw the item and guide lines
+		if(
+			!(hdw.weaponstatus[0]&FRAGF_SPOONOFF)
+			||level.time&1
+		)sb.drawimage(statusicon,(0,30+(hdw.weaponstatus[FRAGS_HOLDINGFIRE]<<2))+hpl.wepbob,
+					  sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER,
+				alpha:(hdw.weaponstatus[0]&FRAGF_INHAND)||hpl.countinv("HDMG13GrenadeAmmo")?1.:0.3,
+					  scale:(1.2,1.2)
+		);
+		if(hdw.weaponstatus[FRAGS_FORCE]>0)for(int i=hdw.weaponstatus[FRAGS_FORCE];i>0;i--){
+			if(i&(1|2|4))continue;
+			sb.drawrect(25,-30-(i<<1),8,0.5);
+			sb.drawrect(-25,-30-(i<<1),-8,0.5);
+		}
 	}
+
 	
 	override void ForceBasicAmmo(){
 		owner.A_SetInventory("HDMG13GrenadeAmmo",1);
