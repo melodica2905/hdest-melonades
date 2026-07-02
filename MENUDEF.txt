@@ -1,0 +1,29 @@
+AddOptionMenu "OptionsMenu"
+{
+	Submenu "Melonades", "MelonadesMenu"
+}
+
+AddOptionMenu "HDAddonMenu"
+{
+	Submenu "Melonades", "MelonadesMenu"
+}
+
+OptionMenu "MelonadesMenu"
+{
+	Title "Melonades Options"
+
+	/* 	
+	StaticText "----- Grenade Spawns -----", "Gold"
+	MelonadeSpawnOption "Thunder Grenades", "melonade_spawns", "YesNo", 0
+	MelonadeSpawnOption "MG13 Grenades", "melonade_spawns", "YesNo", 1
+	MelonadeSpawnOption "Stones", "melonade_spawns", "YesNo", 2
+	MelonadeSpawnOption "Impact Grenades", "melonade_spawns", "YesNo", 3
+	Command "Disable All", "melonade_spawns 0"
+	*/
+
+	StaticText "$MENU_MELONADESPAWNOPTIONS", "Gold"
+	Option "$MENU_MELONADE_THUNDER", "melonade_thunder_spawn", "OnOff"
+	Option "$MENU_MELONADE_MG13", "melonade_mg13_spawn", "OnOff"
+	Option "$MENU_MELONADE_STONE", "melonade_stone_spawn", "OnOff"
+	Option "$MENU_MELONADE_IMPACT", "melonade_impact_spawn", "OnOff"
+}

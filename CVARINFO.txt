@@ -1,0 +1,11 @@
+server bool melonade_thunder_spawn = true;
+server bool melonade_impact_spawn = true;
+server bool melonade_stone_spawn = true;
+server bool melonade_mg13_spawn = true;
+
+server bool melonade_persistant_spawning = false;
+
+// Merchant Store Filters
+server bool hdm_enable_impactgrenade = true;
+server bool hdm_enable_thundergrenade = true;
+server bool hdm_enable_mg13grenade = true;

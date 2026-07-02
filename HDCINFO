@@ -1,15 +1,19 @@
-// Impact Grenade Spawn Entries
-addSpawnTableSingleEntry => { "tableName": "RocketBoxReplaces", "name": "HDImpactGrenadePickup", "weight": "#melo_impact_rocketbox_spawn_bias", "persists": "#melo_impact_persistant_spawning" }
+addSpawnTableSingleEntry =>	{ "tableName": "CellPackReplaces", "name": "HDThunderGrenadePickup", "weight": "2.0", "persists": "false", "Enabled": "#melonade_thunder_spawn"}
+addSpawnTableSingleEntry =>	{ "tableName": "RocketBoxReplaces", "name": "HDThunderGrenadePickup", "weight": "2.0", "persists": "false", "Enabled": "#melonade_thunder_spawn"}
+addBPSpawnPoolFilter => { "name": "HDThunderGrenadeAmmo", "allowed": "#melonade_thunder_spawn" }
+addAmmoBoxFilter => { "ammoName": "HDThunderGrenadeAmmo", "allowed": "#melonade_thunder_spawn" }
 
-// MG-13 Grenade Spawn Entries
-addSpawnTableSingleEntry => { "tableName": "ChainsawReplaces", "name": "MG13GrenadeP", "weight": "#melo_mg13_chainsaw_spawn_bias", "persists": "#melo_mg13_persistant_spawning" }
+addSpawnTableSingleEntry =>	{ "tableName": "ChainsawReplaces", "name": "MG13GrenadeP", "weight": "0.05", "persists": "false", "Enabled": "#melonade_mg13_spawn"}
+addBPSpawnPoolFilter => { "name": "HDMG13GrenadeAmmo", "allowed": "#melonade_mg13_spawn" }
+addAmmoBoxFilter => { "ammoName": "HDMG13GrenadeAmmo", "allowed": "#melonade_mg13_spawn" }
 
-// Stone Spawn Entries
-addSpawnTableSingleEntry => { "tableName": "ChainsawReplaces", "name": "StonePileSpawner", "weight": "#melo_stone_chainsaw_spawn_bias", "persists": "#melo_stone_persistant_spawning" }
+addSpawnTableSingleEntry =>	{ "tableName": "ChainsawReplaces", "name": "StonePileSpawner", "weight": "0.1", "persists": "false", "Enabled": "#melonade_stone_spawn"}
+addBPSpawnPoolFilter => { "name": "HDStoneGrenadeAmmo", "allowed": "#melonade_stone_spawn" }
+addAmmoBoxFilter => { "ammoName": "HDStoneGrenadeAmmo", "allowed": "#melonade_stone_spawn" }
 
-// Thunder Grenade Spawn Entries
-addSpawnTableSingleEntry => { "tableName": "CellPackReplaces", "name": "HDThunderGrenadePickup", "weight": "#melo_thunder_cellpack_spawn_bias", "persists": "#melo_thunder_persistant_spawning" }
-addSpawnTableSingleEntry => { "tableName": "RocketBoxReplaces", "name": "HDThunderGrenadePickup", "weight": "#melo_thunder_rocketbox_spawn_bias", "persists": "#melo_thunder_persistant_spawning" }
+addSpawnTableSingleEntry =>	{ "tableName": "RocketBoxReplaces", "name": "HDImpactGrenadePickup", "weight": "4.0", "persists": "false", "Enabled": "#melonade_impact_spawn"}
+addBPSpawnPoolFilter => { "name": "HDImpactGrenadeAmmo", "allowed": "#melonade_impact_spawn" }
+addAmmoBoxFilter => { "ammoName": "HDImpactGrenadeAmmo", "allowed": "#melonade_impact_spawn" }
 
 // Merchant Store Entries
 newMerchantStoreItem => { "enabled": "#hdm_enable_impactgrenade", "type": "ammo", "category": "$MERCH_CAT_IMPACTGRENADE", "item": "HDImpactGrenadeAmmo", "icon": "IMPGA0", "displayName": "$MERCH_TAG_IMPACTGRENADE", "basePrice": "30", "flavorText": "$MERCH_FLAVOR_IMPACTGRENADE" }
