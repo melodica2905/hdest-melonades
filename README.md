@@ -1,7 +1,7 @@
 # Melonades (Melodica's Custom Grenades)
 Custom grenades for Hideous Destructor.
 
-Has a menu where you can toggle grenade types on and off for spawning.
+Has a menu where you can toggle grenade types on and off for spawning. (This requires https://github.com/HDest-Community/hdest-core-lib)
 
 **Currently adds:**
 *  Thunder Grenades **(loadout code THG)**
